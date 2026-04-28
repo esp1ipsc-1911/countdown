@@ -1,0 +1,38 @@
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #000; }
+button { font: inherit; border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.app-shell { min-height: 100vh; min-height: 100dvh; background: #000; color: white; display: flex; justify-content: center; overflow: hidden; }
+.phone-frame { width: 100%; max-width: 430px; min-height: 100vh; min-height: 100dvh; padding: max(24px, env(safe-area-inset-top)) 22px max(20px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; background: #000; }
+.status-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 42px; }
+.clock { font-size: 26px; font-weight: 800; }
+.dynamic-island { height: 44px; width: 194px; border: 4px solid rgba(0, 95, 21, 0.85); border-radius: 999px; display: flex; align-items: center; justify-content: center; color: #34ff70; font-size: 36px; line-height: 1; }
+.battery-row { display: flex; align-items: center; gap: 8px; font-weight: 800; }
+.orange-dot { width: 11px; height: 11px; border-radius: 50%; background: #ff9c35; display: block; }
+.signal { color: #ddd; letter-spacing: -2px; font-size: 14px; }
+.battery { background: #35c864; color: white; padding: 2px 6px; border-radius: 6px; font-size: 15px; }
+.title-row { position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 36px; }
+.title-row h1 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: .04em; }
+.settings-button { position: absolute; right: 0; background: transparent; color: #d7ad45; font-size: 32px; line-height: 1; }
+.segment-control { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px; margin-bottom: 72px; background: #171e28; border-radius: 31px; }
+.segment-control button { height: 58px; border-radius: 24px; background: transparent; color: #d7ad45; font-size: 19px; font-weight: 900; }
+.segment-control button.active { background: #000; color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45); }
+.timer-card { background: #c6f5ff; color: #243d79; border-radius: 30px; padding: 34px 26px; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,.45); }
+.timer-card.warning { background: #ffe39c; }
+.timer-card h2 { margin: 0 0 24px; font-size: 24px; font-weight: 900; opacity: .86; }
+.timer-display { font-size: clamp(64px, 19vw, 88px); line-height: .95; font-weight: 1000; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; text-shadow: 0 4px 14px rgba(36,61,121,.24); }
+.progress-track { width: 70%; height: 4px; margin: 34px auto; border-radius: 99px; background: rgba(36,61,121,.25); overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 99px; background: rgba(36,61,121,.75); transition: width .45s linear; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 28px; }
+.info-grid p { margin: 0; font-size: 21px; font-weight: 900; opacity: .86; }
+.info-grid strong { display: block; margin-top: 8px; font-size: 54px; line-height: 1; font-weight: 1000; font-variant-numeric: tabular-nums; }
+.status-text { font-size: 22px; font-weight: 900; opacity: .86; }
+.reset-button { margin: 22px auto 0; background: transparent; color: #777; font-size: 13px; font-weight: 900; text-decoration: underline; text-underline-offset: 4px; }
+.spacer { flex: 1; min-height: 28px; }
+.bottom-panel { border-top: 1px solid #171717; padding-top: 20px; }
+.main-button { width: 100%; height: 78px; border-radius: 28px; color: white; font-size: 32px; font-weight: 1000; letter-spacing: .04em; box-shadow: 0 14px 36px rgba(0,0,0,.5); }
+.main-button.start { background: #ff3d47; }
+.main-button.pause { background: #f5c242; color: #000; }
+.main-button.restart { background: #22a95a; }
+.audio-status { margin-top: 14px; text-align: center; color: #777; font-size: 12px; }
+@media (max-height: 760px) { .status-row { margin-bottom: 24px; } .segment-control { margin-bottom: 36px; } .timer-card { padding: 26px 22px; } .bottom-panel { padding-top: 14px; } .main-button { height: 70px; } }
