@@ -29,25 +29,51 @@ function App() {
     }
   }
 
-  function beep(freq = 880, length = 0.25) {
+  // 🔊 ONE MINUTE voice
+  function speakOneMinute() {
+    if ("speechSynthesis" in window) {
+      const msg = new SpeechSynthesisUtterance("ONE MINUTE");
+
+      msg.lang = "en-US";
+      msg.volume = 1;
+      msg.rate = 0.9;
+      msg.pitch = 1;
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(msg);
+    }
+  }
+
+  // 🔥 EKSTREMT TYDELIG SLUTTALARM
+  function loudAlarm() {
     const ctx = audioContextRef.current;
     if (!ctx) return;
 
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    const now = ctx.currentTime;
 
-    osc.frequency.value = freq;
-    osc.type = "sine";
+    function tone(freq, start, duration, volume = 0.7) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-    gain.gain.setValueAtTime(0.001, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + length);
+      osc.type = "square";
+      osc.frequency.setValueAtTime(freq, start);
 
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.exponentialRampToValueAtTime(volume, start + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
 
-    osc.start();
-    osc.stop(ctx.currentTime + length + 0.05);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(start);
+      osc.stop(start + duration + 0.02);
+    }
+
+    tone(1200, now + 0.0, 0.25);
+    tone(900, now + 0.3, 0.25);
+    tone(1200, now + 0.6, 0.25);
+    tone(900, now + 0.9, 0.25);
+    tone(1400, now + 1.2, 0.5);
   }
 
   function selectTime(minutes) {
@@ -92,7 +118,6 @@ function App() {
           setIsRunning(false);
           return 0;
         }
-
         return prev - 1;
       });
     }, 1000);
@@ -101,35 +126,20 @@ function App() {
   }, [isRunning]);
 
   useEffect(() => {
-    // 🔊 ONE MINUTE voice
+    // 🔊 ONE MINUTE
     if (isRunning && timeLeft === 60 && !oneMinutePlayed.current) {
       oneMinutePlayed.current = true;
-
-      if ("speechSynthesis" in window) {
-        const msg = new SpeechSynthesisUtterance("ONE MINUTE");
-
-        msg.lang = "en-US";
-        msg.volume = 1;
-        msg.rate = 0.9;
-        msg.pitch = 1;
-
-        speechSynthesis.cancel();
-        speechSynthesis.speak(msg);
-      }
+      speakOneMinute();
     }
 
-    // 🔔 End alarm (beep beholdt)
+    // 🔥 SLUTTALARM
     if (timeLeft === 0 && !finishedPlayed.current) {
       finishedPlayed.current = true;
-
-      beep(950, 0.3);
-      setTimeout(() => beep(760, 0.3), 400);
-      setTimeout(() => beep(950, 0.4), 800);
+      loudAlarm();
     }
   }, [timeLeft, isRunning]);
 
   const selectedMinutes = duration / 60;
-  const isLastMinute = timeLeft > 0 && timeLeft <= 60;
 
   return (
     <div className="app">
@@ -151,14 +161,8 @@ function App() {
           ))}
         </section>
 
-        <section className={isLastMinute ? "timer-card warning" : "timer-card"}>
-          <h2>
-            {timeLeft === 0
-              ? "Time out"
-              : isLastMinute
-              ? "Last minute"
-              : "Time left"}
-          </h2>
+        <section className="timer-card">
+          <h2>{timeLeft === 0 ? "Time out" : "Time left"}</h2>
 
           <div className="time">{formatTime(timeLeft)}</div>
 
