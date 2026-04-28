@@ -101,13 +101,24 @@ function App() {
   }, [isRunning]);
 
   useEffect(() => {
+    // 🔊 ONE MINUTE voice
     if (isRunning && timeLeft === 60 && !oneMinutePlayed.current) {
       oneMinutePlayed.current = true;
 
-      beep(740, 0.25);
-      setTimeout(() => beep(740, 0.25), 350);
+      if ("speechSynthesis" in window) {
+        const msg = new SpeechSynthesisUtterance("ONE MINUTE");
+
+        msg.lang = "en-US";
+        msg.volume = 1;
+        msg.rate = 0.9;
+        msg.pitch = 1;
+
+        speechSynthesis.cancel();
+        speechSynthesis.speak(msg);
+      }
     }
 
+    // 🔔 End alarm (beep beholdt)
     if (timeLeft === 0 && !finishedPlayed.current) {
       finishedPlayed.current = true;
 
